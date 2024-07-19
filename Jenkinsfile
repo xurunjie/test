@@ -26,6 +26,7 @@ pipeline {
             steps {
                 // 构建步骤
                 echo 'Building...'
+                echo '33333...'
             }
         }
     }
