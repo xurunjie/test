@@ -39,11 +39,5 @@ pipeline {
                 // 测试步骤
             }
         }
-        stage('Deploy') {
-            steps {
-                echo 'Deploying...'
-                // 部署步骤
-            }
-        }
     }
 }
