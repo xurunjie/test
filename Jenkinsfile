@@ -1,43 +1,46 @@
 pipeline {
     agent any
 
+    environment {
+        WORKSPACE_DIR = 'workspace'
+    }
+
     stages {
         stage('Checkout') {
             steps {
-                // Checkout the code from the repository
-                echo 'venv venv'
-                checkout scm
+                script {
+                    echo "Workspace directory: ${env.WORKSPACE_DIR}"
+                    
+                    if (!fileExists("${env.WORKSPACE_DIR}/.git")) {
+                        // Initial checkout
+                        dir(env.WORKSPACE_DIR) {
+                            checkout scm
+                        }
+                        stash name: 'workspace', includes: "${env.WORKSPACE_DIR}/**/*"
+                    } else {
+                        // Restore from stash and pull latest changes
+                        unstash 'workspace'
+                        dir(env.WORKSPACE_DIR) {
+                            sh 'git pull'
+                        }
+                    }
+                }
             }
         }
-        
-        stage('Set Up Environment') {
+        stage('Build') {
             steps {
-                // Set up Python environment
-                echo 'python3 -m venv venv'
-                echo 'source venv/bin/activate'
-            }
-        }
-
-        stage('Install Dependencies') {
-            steps {
-                // Install dependencies
-                echo 'pip install -r requirements.txt'
-            }
-        }
-
-        stage('Run Tests') {
-            steps {
-                // Run tests
-                echo 'pytest'
+                echo "Workspace directory during build: ${env.WORKSPACE_DIR}"
+                dir(env.WORKSPACE_DIR) {
+                    // Your build steps here
+                    sh 'make build'
+                }
             }
         }
     }
-
     post {
         always {
-            // Clean up environment
-            echo 'deactivate'
-            cleanWs()
+            echo "Stashing workspace directory: ${env.WORKSPACE_DIR}"
+            stash name: 'workspace', includes: "${env.WORKSPACE_DIR}/**/*"
         }
     }
 }
