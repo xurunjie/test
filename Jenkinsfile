@@ -1,7 +1,12 @@
 pipeline {
     agent any
+
+    options {
+        skipDefaultCheckout true
+    }
+
     stages {
-        stage("Declarative: Checkout SCM") {
+        stage("checkout") {
             steps {
                 script {
                     // 拉取指定的提交
