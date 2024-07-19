@@ -1,7 +1,7 @@
 pipeline {
     agent any
     stages {
-        stage('Checkout SCM') {
+        stage("Declarative: Checkout SCM") {
             steps {
                 script {
                     // 拉取指定的提交
