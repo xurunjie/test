@@ -19,17 +19,5 @@ pipeline {
                 // 在这里添加你的构建命令，例如：sh 'make build'
             }
         }
-        stage('Test') {
-            steps {
-                echo 'Testing...'
-                // 在这里添加你的测试命令，例如：sh 'make test'
-            }
-        }
-        stage('Deploy') {
-            steps {
-                echo 'Deploying...'
-                // 在这里添加你的部署命令，例如：sh 'make deploy'
-            }
-        }
     }
 }
