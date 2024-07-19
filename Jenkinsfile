@@ -9,14 +9,26 @@ pipeline {
         stage('Print Environment Variables') {
             steps {
                 script {
-                    sh 'printenv'
+                    bat 'set'
                 }
             }
         }
         stage('Build') {
             steps {
                 echo 'Building...'
-                // 在这里添加你的构建命令，例如：sh 'make build'
+                // 在这里添加你的构建命令，例如：bat 'make build'
+            }
+        }
+        stage('Test') {
+            steps {
+                echo 'Testing...'
+                // 在这里添加你的测试命令，例如：bat 'make test'
+            }
+        }
+        stage('Deploy') {
+            steps {
+                echo 'Deploying...'
+                // 在这里添加你的部署命令，例如：bat 'make deploy'
             }
         }
     }
