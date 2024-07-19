@@ -1,22 +1,34 @@
 pipeline {
     agent any
-
-    options {
-        skipDefaultCheckout true
+    environment {
+        GIT_REPO_URL = 'https://your.git.repo/url.git'
+        BRANCH_NAME = 'main' // 你的分支名
+        COMMIT_HASH = '' // 环境变量中的 commit hash，如果为空则拉取最新代码
     }
-
-    parameters {
-        string(name: 'BRANCH', defaultValue: 'main', description: 'Branch to checkout')
-        string(name: 'COMMIT_ID', defaultValue: '', description: 'Specific commit ID to checkout, leave empty for latest')
-    }
-
-
     stages {
         stage('Print Environment Variables') {
             steps {
                 script {
                     sh 'printenv'
                 }
+            }
+        }
+        stage('Build') {
+            steps {
+                echo 'Building...'
+                // 在这里添加你的构建命令，例如：sh 'make build'
+            }
+        }
+        stage('Test') {
+            steps {
+                echo 'Testing...'
+                // 在这里添加你的测试命令，例如：sh 'make test'
+            }
+        }
+        stage('Deploy') {
+            steps {
+                echo 'Deploying...'
+                // 在这里添加你的部署命令，例如：sh 'make deploy'
             }
         }
     }
