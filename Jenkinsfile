@@ -1,42 +1,26 @@
 pipeline {
     agent any
-    environment {
-        GIT_REPO = 'git@github.com:xurunjie/test.git'
-        BRANCH = 'main'
-    }
     stages {
-        stage('Checkout or Pull SCM') {
+        stage('Checkout') {
             steps {
                 script {
-                    // 检查工作空间是否已经有.git目录
-                    if (fileExists('.git')) {
-                        echo 'Repository exists, pulling latest changes'
-                        sh '''
-                            git reset --hard
-                            git clean -fd
-                            git pull origin ${BRANCH}
-                        '''
-                    } else {
-                        echo 'Repository does not exist, cloning'
-                        sh '''
-                            git clone ${GIT_REPO} .
-                            git checkout ${BRANCH}
-                        '''
-                    }
+                    // 拉取指定的提交
+                    checkout([
+                        $class: 'GitSCM',
+                        branches: [[name: 'main']],
+                        userRemoteConfigs: [[url: 'git@github.com:xurunjie/test.git']],
+                        extensions: [
+                            [$class: 'CloneOption', shallow: true, depth: 1, noTags: true],
+                            [$class: 'RelativeTargetDirectory', relativeTargetDir: 'repo']
+                        ]
+                    ])
                 }
             }
         }
-        // 其他的阶段可以在这里定义
         stage('Build') {
             steps {
-                echo 'Building...'
                 // 构建步骤
-            }
-        }
-        stage('Test') {
-            steps {
-                echo 'Testing...'
-                // 测试步骤
+                echo 'Building...'
             }
         }
     }
