@@ -10,19 +10,19 @@ pipeline {
         stage('Checkout') {
             steps {
                 script {
-                    echo "Workspace directory: ${env.WORKSPACE_DIR}"
+                    echo "Workspace directory"
                 }
             }
         }
         stage('Build') {
             steps {
-                echo "Workspace directory during build: ${env.WORKSPACE_DIR}"
+                echo "Workspace directory during build"
             }
         }
     }
     post {
         always {
-            echo "Stashing workspace directory: ${env.WORKSPACE_DIR}"
+            echo "Stashing workspace directory"
         }
     }
 }
